@@ -1,0 +1,15 @@
+<html>
+<head>
+  <title>Outdoors Ohio</title>
+  <script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+  <link rel="stylesheet" href="map.css">
+</head>
+
+<body>
+  <input id="slide" type="range" min="0" max="1" step="0.1" value="1.0" oninput="updateOpacity(this.value)">
+  <div id="map"></div>
+</body>
+
+<script src="map.js"></script>
+</html>
