@@ -13,12 +13,33 @@ L.mapbox.tileLayer('jonmartindell.b0tb48ym', {format: 'png256'}).addTo(metro_par
 L.mapbox.tileLayer('jonmartindell.4k9rucwr', {format: 'png256'}).addTo(metro_parks);
 L.mapbox.tileLayer('jonmartindell.d0zjvmth', {format: 'png256'}).addTo(metro_parks);
 
+// Geolocation Stuff
+map.locate({setView: true, maxZoom: 16});
 
+function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+}
+
+map.on('locationfound', onLocationFound);
+
+function onLocationError(e) {
+    alert(e.message);
+}
+
+map.on('locationerror', onLocationError);
+
+// Slider opacity filter
 function updateOpacity(value) {
   metro_parks.eachLayer(function (layer) {
     layer.setOpacity(value);
   });
 }
+
 // var satellite_tile = L.tileLayer('https://api.mapbox.com/v4/mapbox.streets-satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoiam9ubWFydGluZGVsbCIsImEiOiJjaXcyZWZzeGQwYmY0MnlvdXh3Y2RobGN0In0.mdqG2-mAIb2kXHNhg8rohQ', {
 //   attribution: '&copy; Mapbox &copy; OpenStreetMap contributors',
 //   maxZoom: 18
@@ -50,22 +71,3 @@ function updateOpacity(value) {
 //
 // L.control.layers(baseLayers, overlays).addTo(map);
 //
-// // Geolocation Stuff
-// map.locate({setView: true, maxZoom: 16});
-//
-// function onLocationFound(e) {
-//     var radius = e.accuracy / 2;
-//
-//     L.marker(e.latlng).addTo(map)
-//         .bindPopup("You are within " + radius + " meters from this point").openPopup();
-//
-//     L.circle(e.latlng, radius).addTo(map);
-// }
-//
-// map.on('locationfound', onLocationFound);
-//
-// function onLocationError(e) {
-//     alert(e.message);
-// }
-//
-// map.on('locationerror', onLocationError);
