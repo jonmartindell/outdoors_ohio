@@ -7,11 +7,34 @@ var map = L.mapbox.map('map', 'mapbox.streets-satellite')
 var metro_parks = new L.LayerGroup()
 metro_parks.addTo(map);
 
-L.mapbox.tileLayer('jonmartindell.4y4fn9ud', {format: 'png256'}).addTo(metro_parks);
-L.mapbox.tileLayer('jonmartindell.8ny1cekb', {format: 'png256'}).addTo(metro_parks);
-L.mapbox.tileLayer('jonmartindell.b0tb48ym', {format: 'png256'}).addTo(metro_parks);
-L.mapbox.tileLayer('jonmartindell.4k9rucwr', {format: 'png256'}).addTo(metro_parks);
-L.mapbox.tileLayer('jonmartindell.d0zjvmth', {format: 'png256'}).addTo(metro_parks);
+// Grab all tilesets from MetroParks Style
+var request = new XMLHttpRequest();
+request.open('GET', 'https://api.mapbox.com/styles/v1/jonmartindell/ciw2jbamg004i2kqmpxbyhy91?access_token='+L.mapbox.accessToken, true);
+
+request.onload = function() {
+  if (request.status >= 200 && request.status < 400) {
+    // Success!
+    var resp = request.responseText;
+    for (var map in JSON.parse(resp)["sources"]) {
+      tile_name = map.replace("mapbox://", "");
+      console.log("adding tile: "+tile_name);
+      L.mapbox.tileLayer(tile_name, {format: 'png256'}).addTo(metro_parks);
+    }
+  } else {
+    // We reached our target server, but it returned an error
+    alert(request.responseText);
+  }
+};
+request.onerror = function() {
+  alert("error fetching metro parks style");
+};
+request.send();
+
+// L.mapbox.tileLayer('jonmartindell.4y4fn9ud', {format: 'png256'}).addTo(metro_parks);
+// L.mapbox.tileLayer('jonmartindell.8ny1cekb', {format: 'png256'}).addTo(metro_parks);
+// L.mapbox.tileLayer('jonmartindell.b0tb48ym', {format: 'png256'}).addTo(metro_parks);
+// L.mapbox.tileLayer('jonmartindell.4k9rucwr', {format: 'png256'}).addTo(metro_parks);
+// L.mapbox.tileLayer('jonmartindell.d0zjvmth', {format: 'png256'}).addTo(metro_parks);
 
 // Geolocation Stuff
 map.locate({setView: true, maxZoom: 16});
